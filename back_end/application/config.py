@@ -1,9 +1,9 @@
 class Config():
     DEBUG=False
-    SQLALCHMY_TRACK_MODICATIONS=False
+    SQLALCHMY_TRACK_MODIFICATIONS=False
 
-class LocalDvelopmentConfig(Config):
-    SQLALCHMY_database_URI='sqlite:///db.sqlite3'
+class LocalDevelopmentConfig(Config):
+    SQLALCHEMY_DATABASE_URI='sqlite:///db.sqlite3'
     DEBUG=True
 
     SECRET_KEY="1234567890"  #hash user c in session
