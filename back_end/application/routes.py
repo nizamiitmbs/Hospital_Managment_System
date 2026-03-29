@@ -1,15 +1,20 @@
-from flask import current_app as app,jsonify
+from flask import current_app as app,jsonify,request
 from flask_security import auth_required,roles_required,current_user
 
-@app.route('/admin')
+
+@app.route('/',methods=['GET'])
+def home():
+    return "<h1>home</h1>"
+
+@app.route('/api/admin')
 @auth_required('token')
 @roles_required('admin')
 def admin_home():
     return "<h1>skjvbskjnv</h1>"
 
-@app.route('/user/<user_id>')
+@app.route('/api/home')
 @auth_required('token')
-@roles_required('user')
+@roles_required(['user','admin'])
 def user_home(user_id):
    
     user=current_user()
@@ -18,4 +23,24 @@ def user_home(user_id):
         "email":user.email,
         "password":user.password
     })
+
+@app.route('/api/registration',methods=['POST'])
+def registration():
+    credentials=request.get_json()
+    if not app.security.datastore.find_user(email="user1@user.com"):
+        app.security.datastore.create_user(email="user1@user.com",
+                                           username ="user01",
+                                           password=hash_password(),
+                                           roles=['user'])
+        db.session.commit()
+        return jsonify({
+            "messgae":"user created"
+        }),201
+        
+    return jsonify({
+            "messgae":"baigan"
+        }),400
+        
+
+
 
