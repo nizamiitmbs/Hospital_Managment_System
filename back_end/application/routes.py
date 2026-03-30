@@ -1,10 +1,13 @@
 from flask import current_app as app,jsonify,request
-from flask_security import auth_required,roles_required,current_user
-
+from flask_security import auth_required,roles_required,hash_password,current_user
+from .models import *
 
 @app.route('/',methods=['GET'])
 def home():
-    return "<h1>home</h1>"
+
+    return jsonify({
+        "name" : Role.query.all() 
+    }) 
 
 @app.route('/api/admin')
 @auth_required('token')
@@ -24,7 +27,7 @@ def user_home(user_id):
         "password":user.password
     })
 
-@app.route('/api/registration',methods=['POST'])
+@app.route('/api/register',methods=['POST'])
 def registration():
     credentials=request.get_json()
     if not app.security.datastore.find_user(email="user1@user.com"):
